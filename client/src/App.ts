@@ -1,5 +1,6 @@
 import Component from './core/Component';
 import './ddd.scss';
+import Buttons from '@/Buttons';
 
 export default class App extends Component {
   state: { count: number; user: string } | undefined;
@@ -31,32 +32,11 @@ export default class App extends Component {
   template(): string {
     super.template();
     return `
-  <div id='app'>
     <h1>${process.env.NODE_ENV}</h1>
-    <button name='plus-button'>+</button>
-    <button name='minus-button'>-</button>
+    <div data-component='buttons'></div>
     <h2>${this.state?.count}번 클릭</h2>
     <span>user: ${this.state?.user}</span>
-  </div>
   `;
-  }
-
-  setEvent() {
-    super.setEvent();
-    if (!this.$target) return;
-    this.$target.addEventListener('click', (e: MouseEvent) => {
-      const { name } = e.target as HTMLButtonElement;
-      switch (name) {
-        case 'plus-button':
-          this.increase();
-          break;
-        case 'minus-button':
-          this.decrease();
-          break;
-        default:
-          break;
-      }
-    });
   }
 
   mount() {
@@ -70,5 +50,15 @@ export default class App extends Component {
     $Img.alt = 'user';
     const $app: HTMLElement | null = document.getElementById('app');
     $app?.appendChild($Img);
+
+    const { state, increase, decrease } = this;
+    const $buttons: HTMLElement | null | undefined =
+      this.$target?.querySelector('[data-component="buttons"]');
+    if (!$buttons) return;
+    new Buttons($buttons, {
+      count: state?.count,
+      increase: increase.bind(this),
+      decrease: decrease.bind(this), // this binding
+    });
   }
 }

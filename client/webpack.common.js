@@ -49,6 +49,9 @@ module.exports = {
     ],
   },
   resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
     extensions: ['.ts', '.js', '.scss', '.css'], // 앞에서부터 순서대로 해석
   },
   plugins: [
