@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var http_1 = require("http");
 var cors = require("cors");
-// const cors = require("cors");
 var app = express();
 var port = 5000;
 var server = (0, http_1.createServer)(app);
@@ -13,6 +12,7 @@ app.get("/", function (req, res) {
 app.use(cors({
     origin: "*",
 }));
+// cors 허용
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // deprecated 된 body-parser 대신 사용

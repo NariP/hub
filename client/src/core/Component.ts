@@ -28,8 +28,9 @@ export default class Component {
     // event setting
   }
   setState(newState: object) {
+    const prev = this.state;
     this.state = { ...this.state, ...newState };
-    this.render();
+    JSON.stringify(prev) !== JSON.stringify(this.state) && this.render();
   }
   render() {
     if (!this.$target) return;

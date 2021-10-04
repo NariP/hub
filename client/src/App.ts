@@ -1,64 +1,63 @@
 import Component from './core/Component';
-import './ddd.scss';
-import Buttons from '@/Buttons';
+import './style/globalStyle.scss';
+import { Main } from '@/pages';
+import { Header } from '@/components';
+import { routes, getView } from '@/routes';
+import { activateNavMenu } from '@/utils';
 
 export default class App extends Component {
-  state: { count: number; user: string } | undefined;
+  state:
+    | {
+        $main: HTMLElement | null;
+      }
+    | undefined;
   setup() {
     super.setup();
-    this.state = { count: 0, user: '' };
+    this.state = { $main: null };
   }
 
-  increase() {
-    if (!this.state?.count && this.state?.count !== 0) return;
-    this.setState({ count: this.state?.count + 1 });
-  }
-
-  decrease() {
-    if (!this.state?.count && this.state?.count !== 0) return;
-    this.setState({ count: this.state?.count - 1 });
-  }
-
-  async init() {
-    try {
-      console.log('api loading...');
-      const res = await fetch('http://localhost:5000/api');
-      return await res.json();
-    } catch (e) {
-      console.error(e);
-    }
+  setEvent() {
+    super.setEvent();
+    window.addEventListener('popstate', () => {
+      if (!this.state?.$main) return;
+      getView(location.pathname, this.state?.$main, {});
+      const currentPath =
+        location.pathname === '/'
+          ? 'HOME'
+          : location.pathname.substring(1).toUpperCase();
+      const $menuNode: HTMLElement | null | undefined =
+        this.$target?.querySelector('[data-component="navigation"]');
+      if (!$menuNode) return;
+      const $selectedMenuItem: HTMLElement | Element | null | undefined =
+        $menuNode?.querySelector(`[data-key=${currentPath}]`);
+      if (!$selectedMenuItem) return;
+      activateNavMenu($menuNode, $selectedMenuItem);
+    });
   }
 
   template(): string {
     super.template();
     return `
-    <h1>${process.env.NODE_ENV}</h1>
-    <div data-component='buttons'></div>
-    <h2>${this.state?.count}번 클릭</h2>
-    <span>user: ${this.state?.user}</span>
+    <header data-component='header'></header>
+    <main></main>
   `;
   }
 
-  mount() {
-    super.mount();
-    this.init().then(r => this.setState({ user: r.user }));
-  }
-
   update() {
-    const $Img = document.createElement('img');
-    $Img.src = '/static/nr.png';
-    $Img.alt = 'user';
-    const $app: HTMLElement | null = document.getElementById('app');
-    $app?.appendChild($Img);
+    this.setState({ $main: this.$target?.querySelector('main') });
 
-    const { state, increase, decrease } = this;
-    const $buttons: HTMLElement | null | undefined =
-      this.$target?.querySelector('[data-component="buttons"]');
-    if (!$buttons) return;
-    new Buttons($buttons, {
-      count: state?.count,
-      increase: increase.bind(this),
-      decrease: decrease.bind(this), // this binding
-    });
+    /* Header(navigation) */
+    const $header: HTMLElement | null | undefined = this.$target?.querySelector(
+      '[data-component="header"]',
+    );
+    const $main: HTMLElement | null | undefined =
+      this.$target?.querySelector('main');
+
+    if (!$header) return;
+    new Header($header, { outer: $main });
+
+    /* main contents */
+    if (!$main) return;
+    new Main($main, {});
   }
 }
