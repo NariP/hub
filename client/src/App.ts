@@ -1,9 +1,10 @@
 import Component from './core/Component';
-import './style/globalStyle.scss';
 import { Main } from '@/pages';
 import { Header } from '@/components';
-import { routes, getView } from '@/routes';
+import { getView } from '@/routes';
 import { activateNavMenu } from '@/utils';
+import './style/globalStyle.scss';
+import './App.scss';
 
 export default class App extends Component {
   state:

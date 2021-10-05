@@ -2,12 +2,9 @@
 .navigation {
   display: flex;
   justify-content: center;
-  padding: 0 1em;
+  padding: 0 2em;
   font-size: 1.1em;
   font-weight: bold;
-  & > li + li {
-    margin-left: 1em;
-  }
   & > li {
     cursor: pointer;
     padding: 1em;
