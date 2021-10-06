@@ -16,10 +16,10 @@ export default class Buttons extends Component {
       const { name } = e.target as HTMLButtonElement;
       switch (name) {
         case 'plus-button':
-          props.increase();
+          props.store.dispatch(props.increase2());
           break;
         case 'minus-button':
-          props.decrease();
+          props.store.dispatch(props.decrease2());
           break;
         default:
           break;

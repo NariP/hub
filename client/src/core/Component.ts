@@ -1,3 +1,6 @@
+import { observable, observe } from '@/core/observer';
+import { isObjectEqual } from '@/utils';
+
 export default class Component {
   $target: HTMLElement | null | undefined;
   state: object | undefined;
@@ -7,16 +10,19 @@ export default class Component {
     this.$target = $target;
     this.props = props;
     this.setup();
-    this.render();
-    this.setEvent();
     this.mount();
   }
-  setup() {
-    // state 초기화
+  initState() {
+    return {};
   }
-  template() {
-    // html template
-    return '';
+  setup() {
+    console.log(this.initState());
+    this.state = observable(this.initState());
+    observe(() => {
+      this.render();
+      this.setEvent();
+      this.update();
+    });
   }
   mount() {
     // 첫 render 이후 한 번만 동작, ex api
@@ -28,13 +34,16 @@ export default class Component {
     // event setting
   }
   setState(newState: object) {
-    const prev = this.state;
+    const prev: object | undefined = this.state;
     this.state = { ...this.state, ...newState };
-    JSON.stringify(prev) !== JSON.stringify(this.state) && this.render();
+    prev && isObjectEqual(prev, this.state) && this.render();
+  }
+  template() {
+    // html template
+    return '';
   }
   render() {
     if (!this.$target) return;
     this.$target.innerHTML = this.template();
-    this.update();
   }
 }
