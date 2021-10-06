@@ -1,0 +1,8 @@
+[data-component='cards'] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  div + div {
+    margin-left: 1rem;
+  }
+}

@@ -1,30 +1,12 @@
 import Component from '@/core/Component';
-import { observe, observable } from '@/core/observer';
+import Section from './sections/Section';
 
 export default class MainPage extends Component {
   template(): string {
     super.template();
-    return `<h1>MainPage</h1>`;
-  }
-  update() {
-    super.update();
-    const testState = { a: 2, b: 1 };
-    const proxyState = observable(testState) as { [key: string]: any };
-
-    // observableTest
-
-    const adder = () => {
-      console.log(`adder: ${proxyState.a + proxyState.b}`);
-    };
-    const minus = () => {
-      console.log(`minus; ${proxyState.a - proxyState.b}`);
-    };
-
-    observe(adder);
-    observe(minus);
-
-    proxyState.a = 3;
-    console.log(proxyState);
+    return `<h1>MainPage</h1><div>${Section({})}<div>${Section(
+      {},
+    )}<div>${Section({})}<div>${Section({})}<div>실시간 Top 12</div></div>`;
   }
 }
 

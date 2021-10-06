@@ -1,0 +1,15 @@
+@import "src/style/colors";
+[data-component="card"] {
+  border: 1px solid $color-normal-shadow;
+  box-shadow: 3px 3px 5px $color-normal-shadow;
+  width: 300px;
+
+  & > img {
+    width: inherit;
+  }
+
+  .card-body {
+    border-top: 1px solid $color-normal-shadow;
+    padding: 1em;
+  }
+}
